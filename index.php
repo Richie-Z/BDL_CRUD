@@ -1,3 +1,7 @@
+<?php
+include_once __DIR__ . "/koneksi.php";
+$data = mysqli_query($koneksi, "SELECT * FROM mahasiswa ORDER BY id DESC");
+?>
 <!doctype html>
 <html lang="en">
 
@@ -34,18 +38,23 @@
                         <th>jurusan</th>
                         <th>Action</th>
                     </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>2042101867</td>
-                        <td>kasiani</td>
-                        <td>cupuwatu 1</td>
-                        <td>S1 Informatika</td>
-                        <td>
-                            <a href="#" class="btn btn-warning">Ubah</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
+                    <?php
+                    $data = mysqli_query($koneksi, "SELECT * FROM mahasiswa ORDER BY id DESC");
+                    $no = 1;
+                    while ($d = mysqli_fetch_assoc($data)) :
+                    ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= $d['nim'] ?></td>
+                            <td><?= $d['nama'] ?></td>
+                            <td><?= $d['alamat'] ?></td>
+                            <td><?= $d['prodi'] ?></td>
+                            <td>
+                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $d['id'] ?>">Ubah</button>
+                                <a href="aksi_crud.php?action=hapus&id=<?= $d['id'] ?>" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endwhile ?>
                 </table>
             </div>
         </div>
@@ -54,10 +63,7 @@
 
 </html>
 
-
-
-
-<!--  Awal Modal -->
+<!-- Tambah -->
 <div class="modal fade" id="modalTambah" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -66,7 +72,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="aksi_crud.php" method="POST">
+            <form action="aksi_crud.php?action=tambah" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">NIM</label>
@@ -84,7 +90,7 @@
                     <div class="mb-3">
                         <label class="form-label">Prodi</label>
                         <select name="tprodi" class="form-select">
-                            <option></option>
+                            <option selected disabled>Pilih prodi</option>
                             <option value="S1 Informatika">S1 Informatika</option>
                             <option value="S1 Manajemen">S1 Manajemen</option>
                             <option value="S1 Agama Kristen">S1 Agama Kristen</option>
@@ -99,4 +105,51 @@
         </div>
     </div>
 </div>
-<!--  Awal Modal -->
+
+
+<?php
+$data = mysqli_query($koneksi, "SELECT * FROM mahasiswa ORDER BY id DESC");
+$no = 1;
+while ($f = mysqli_fetch_assoc($data)) : ?>
+    <div class="modal fade" id="modalEdit<?= $f['id'] ?>" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Ubah Data Mahasiswa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form action="aksi_crud.php?action=update&id=<?= $f["id"] ?>" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">NIM</label>
+                            <input type="text" class="form-control" name="tnim" placeholder="Masukkan nim anda" value="<?= $f['nim'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="tnama" placeholder="Masukkan nama lengkap anda" value="<?= $f['nama'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea class="form-control" name="talamat" rows="3"><?= $f['alamat'] ?></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prodi</label>
+                            <select name="tprodi" class="form-select">
+                                <option value="S1 Informatika" <?= selected("S1 Informatika", $f["prodi"]) ?>>S1 Informatika</option>
+                                <option value="S1 Manajemen" <?= selected("S1 Manajemen", $f["prodi"]) ?>>S1 Manajemen</option>
+                                <option value="S1 Agama Kristen" <?= selected("S1 Agama Kristen", $f["prodi"]) ?>>S1 Agama Kristen</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" name="bsimpan">Simpan</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Keluar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<?php endwhile ?>
