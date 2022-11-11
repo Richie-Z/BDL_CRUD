@@ -9,3 +9,7 @@ CREATE TABLE mahasiswa(
     alamat VARCHAR (50) NOT NULL,
     prodi VARCHAR(50) NOT NULL
 );
+
+-- @block edit col alamat
+ALTER TABLE mahasiswa
+MODIFY alamat text;
