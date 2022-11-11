@@ -161,7 +161,7 @@ while ($f = mysqli_fetch_assoc($data)) : ?>
                 <h3 class="text-center">Yakin Hapus Data Ini?</h3>
                 <span class="text-center"><?= $f["nim"] . "- " . $f["nama"] ?></span>
                 <div class="modal-footer">
-                    <a href="aksi_crud.php?action=hapus&id=<?= $d['id'] ?>" class="btn btn-danger">Hapus</a>
+                    <a href="aksi_crud.php?action=hapus&id=<?= $f['id'] ?>" class="btn btn-danger">Hapus</a>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Keluar</button>
                 </div>
             </div>
