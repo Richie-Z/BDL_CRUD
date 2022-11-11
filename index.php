@@ -51,7 +51,7 @@ $data = mysqli_query($koneksi, "SELECT * FROM mahasiswa ORDER BY id DESC");
                             <td><?= $d['prodi'] ?></td>
                             <td>
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $d['id'] ?>">Ubah</button>
-                                <a href="aksi_crud.php?action=hapus&id=<?= $d['id'] ?>" class="btn btn-danger">Delete</a>
+                                <button data-bs-toggle="modal" data-bs-target="#hapusKonfirmasi<?= $d['id'] ?>" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                     <?php endwhile ?>
@@ -151,5 +151,20 @@ while ($f = mysqli_fetch_assoc($data)) : ?>
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="hapusKonfirmasi<?= $f['id'] ?>" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Ubah Data Mahasiswa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <h3 class="text-center">Yakin Hapus Data Ini?</h3>
+                <span class="text-center"><?= $f["nim"] . "- " . $f["nama"] ?></span>
+                <div class="modal-footer">
+                    <a href="aksi_crud.php?action=hapus&id=<?= $d['id'] ?>" class="btn btn-danger">Hapus</a>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Keluar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php endwhile ?>
